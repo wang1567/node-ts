@@ -1,6 +1,6 @@
 export class Rational {
-    private numerator: number;
-    private denominator: number;
+    numerator: number;
+    denominator: number;
 
     constructor(numerator: number, denominator: number) {
         this.numerator = numerator;
@@ -16,12 +16,12 @@ export class Rational {
         return this.denominator;
     }
 
-    public normalize(): Rational {
-        const gcd = this.gcd(this.numerator, this.denominator);
-        this.numerator /= gcd;
-        this.denominator /= gcd;
-        return this;
+    public toString(): String{
+        return `${this.numerator}/${this.denominator}`;
     }
+
+   
+    
 
     private gcd(a: number, b: number): number {
         while (b !== 0) {
@@ -31,38 +31,42 @@ export class Rational {
         }
         return a;
     }
+    
+    public normalize(): Rational{
+        let gcd = this.gcd(this.numerator, this.denominator);
+        this.numerator /= gcd;
+        this.denominator /= gcd;
+        return this;
+    }
+
 
     public isWhole(): boolean {
-        return this.denominator === 1;
+        return this.numerator % this.denominator == 0;
     }
 
     public isDecimal(): boolean {
-        return this.denominator !== 1;
+        return !this.isWhole();
     }
 
-    public equals(numerator: number, denominator: number): boolean {
-        const r = new Rational(numerator, denominator);
-        return this.numerator === r.getNumerator() && this.denominator === r.getDenominator();
+    public equals(r: Rational): boolean{
+        return this.normalize().numerator == r.numerator && this.normalize().denominator == r.denominator;
     }
-
     public equalsRational(r: Rational): boolean {
         return this.numerator === r.getNumerator() && this.denominator === r.getDenominator();
     }
 
-    public static parseRational(numChars: string[], denomChars: string[]): Rational {
-        const numerator = parseInt(numChars.join(''), 10);
-        const denominator = parseInt(denomChars.join(''), 10);
-        return new Rational(numerator, denominator);
+    public static _parseRational(numer: String[], denomina: String[]): Rational{
+        let num = numer.join('');
+        let denom = denomina.join('');
+        return new Rational(parseInt(num), parseInt(denom));
     }
 
-    public static parseRationalString(s: string): Rational {
-        const parts = s.split('/');
-        const numerator = parseInt(parts[0], 10);
-        const denominator = parseInt(parts[1], 10);
-        return new Rational(numerator, denominator);
+    public static parseRational(str: String): Rational{
+        let parts = str.split("/");
+        let num = parseInt(parts[0]);
+        let denom = parseInt(parts[1]);
+        return new Rational(num, denom);
     }
 
-    public toString(): string {
-        return `${this.numerator}/${this.denominator}`;
-    }
+    
 }
